@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable no-underscore-dangle */
 import { AstMemoryEfficientTransformer } from '@angular/compiler';
 import { Injectable } from '@angular/core';
@@ -68,9 +69,12 @@ export class BookingService {
     );
   }
   cancelBooking(bookingId: string){
-    return this.bookings.pipe(
+    return this.http.delete(
+      `https://ionic-angular-course-ude-9a908-default-rtdb.firebaseio.com/bookings/${bookingId}.json`
+      ).pipe(switchMap(() => {
+        return this.bookings;
+      }),
       take(1),
-      delay(1000),
       tap(bookings => {
         this._bookings.next(bookings.filter(b => b.id !== bookingId));
       })
